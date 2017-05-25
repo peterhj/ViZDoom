@@ -151,6 +151,33 @@ set_target_properties(libvizdoom_shared
 
 add_subdirectory(${VIZDOOM_SRC_DIR}/vizdoom)
 
+set(VIZDOOM_LIB_FFI_OUTPUT_NAME vizdoom_ffi)
+set(VIZDOOM_LIB_FFI_SRC_DIR ${VIZDOOM_SRC_DIR}/lib_ffi)
+
+file(GLOB VIZDOOM_LIB_FFI_SOURCES
+        ${VIZDOOM_INCLUDE_DIR}/*.h
+        ${VIZDOOM_LIB_SRC_DIR}/*.h
+        ${VIZDOOM_LIB_SRC_DIR}/*.cpp
+        ${VIZDOOM_LIB_FFI_SRC_DIR}/*.cpp)
+
+add_library(libvizdoom_ffi_static STATIC ${VIZDOOM_LIB_FFI_SOURCES})
+target_link_libraries(libvizdoom_ffi_static ${VIZDOOM_LIBS})
+
+set_target_properties(libvizdoom_ffi_static
+        PROPERTIES
+        LINKER_LANGUAGE CXX
+        OUTPUT_NAME ${VIZDOOM_LIB_FFI_OUTPUT_NAME}
+        LIBRARY_OUTPUT_NAME ${VIZDOOM_LIB_FFI_OUTPUT_NAME}
+        LIBRARY_OUTPUT_DIRECTORY ${VIZDOOM_OUTPUT_DIR}
+        LIBRARY_OUTPUT_NAME_RELEASE ${VIZDOOM_LIB_FFI_OUTPUT_NAME}
+        LIBRARY_OUTPUT_DIRECTORY_RELEASE ${VIZDOOM_OUTPUT_DIR}
+        LIBRARY_OUTPUT_NAME_DEBUG ${VIZDOOM_LIB_FFI_OUTPUT_NAME}-d
+        LIBRARY_OUTPUT_DIRECTORY_DEBUG ${VIZDOOM_OUTPUT_DIR}
+        LIBRARY_OUTPUT_NAME_MINSIZEREL ${VIZDOOM_LIB_FFI_OUTPUT_NAME}-msr
+        LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${VIZDOOM_OUTPUT_DIR}
+        LIBRARY_OUTPUT_NAME_RELWITHDEBINFO ${VIZDOOM_LIB_FFI_OUTPUT_NAME}-rd
+        LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO ${VIZDOOM_OUTPUT_DIR})
+
 
 # Python binding
 #-----------------------------------------------------------------------------------------------------------------------
