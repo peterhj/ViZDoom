@@ -2927,7 +2927,9 @@ void D_DoomMain (void)
 			P_FreeLevelData();
 			P_FreeExtraLevelData();
 
-			M_SaveDefaults(NULL);			// save config before the restart
+			if (!Args->CheckParm("-noconfig")) {
+				M_SaveDefaults(NULL);			// save config before the restart
+			}
 
 			// delete all data that cannot be left until reinitialization
 			V_ClearFonts();					// must clear global font pointers

@@ -1120,9 +1120,10 @@ namespace vizdoom {
         }
 
         // config
-        this->doomArgs.push_back("-config");
+        this->doomArgs.push_back("-noconfig");
+        /*this->doomArgs.push_back("-config");
         if (this->configPath.length() != 0) this->doomArgs.push_back(prepareFilePathArg(this->configPath));
-        else this->doomArgs.push_back("_vizdoom.ini");
+        else this->doomArgs.push_back("_vizdoom.ini");*/
 
         // map
         this->doomArgs.push_back("+map");
