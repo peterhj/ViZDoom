@@ -4,11 +4,16 @@
 
 extern "C" {
 
-enum DoomGameStatus {
-  DOOM_GAME_STATUS_Success = 0,
-  DOOM_GAME_STATUS_Failure,
-  DOOM_GAME_STATUS_VizdoomUnexpectedExitException,
-  DOOM_GAME_STATUS_UnknownException,
+enum VizdoomFFIStatus {
+  VIZDOOM_FFI_STATUS_Success = 0,
+  VIZDOOM_FFI_STATUS_Failure,
+  VIZDOOM_FFI_STATUS_VizdoomUnexpectedExitException,
+  VIZDOOM_FFI_STATUS_UnknownException,
+};
+
+struct VizdoomFFIBuffer {
+  uint8_t *ptr;
+  size_t len;
 };
 
 vizdoom::DoomGame *DoomGame_new() {
@@ -19,19 +24,19 @@ void DoomGame_delete(vizdoom::DoomGame *game) {
   delete game;
 }
 
-DoomGameStatus DoomGame_init(vizdoom::DoomGame *game) {
+VizdoomFFIStatus DoomGame_init(vizdoom::DoomGame *game) {
   try {
     if (game->init()) {
-      return DOOM_GAME_STATUS_Success;
+      return VIZDOOM_FFI_STATUS_Success;
     } else {
-      return DOOM_GAME_STATUS_Failure;
+      return VIZDOOM_FFI_STATUS_Failure;
     }
   }
   catch (vizdoom::ViZDoomUnexpectedExitException e) {
-    return DOOM_GAME_STATUS_VizdoomUnexpectedExitException;
+    return VIZDOOM_FFI_STATUS_VizdoomUnexpectedExitException;
   }
   catch (...) {
-    return DOOM_GAME_STATUS_UnknownException;
+    return VIZDOOM_FFI_STATUS_UnknownException;
   }
 }
 
@@ -70,6 +75,12 @@ int DoomGame_isPlayerDead(vizdoom::DoomGame *game) {
 vizdoom::GameState *DoomGame_getState(vizdoom::DoomGame *game) {
   vizdoom::GameStatePtr state = game->getState();
   return state.get();
+}
+
+VizdoomFFIBuffer DoomGame_getStateScreenBuffer(vizdoom::DoomGame *game) {
+  vizdoom::GameStatePtr state = game->getState();
+  VizdoomFFIBuffer buf = { .ptr = state->screenBuffer->data(), .len = state->screenBuffer->size()};
+  return buf;
 }
 
 size_t DoomGame_getAvailableButtonsSize(vizdoom::DoomGame *game) {
